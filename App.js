@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { WhenScreen, WhereScreen, CheckScreen, AllScreen } from './screens';
 
-export default TabNavigator(
+const RootTab = createBottomTabNavigator(
   {
     '언제': { screen: WhenScreen },
     '어디서': { screen: WhereScreen },
@@ -12,6 +12,7 @@ export default TabNavigator(
     '전체': { screen: AllScreen }
   },
   {
+    initialRouteName: '언제',
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, tintColor }) => {
         const { routeName } =   navigation.state;
@@ -35,9 +36,13 @@ export default TabNavigator(
       activeTintColor: '#654EA3',
       inactiveTintColor: 'gray',
     },
-    tabBarComponent: TabBarBottom,
-    tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false,
   }
 );
+
+export default class App extends React.Component {
+  render() {
+    return <RootTab />;
+  }
+}
