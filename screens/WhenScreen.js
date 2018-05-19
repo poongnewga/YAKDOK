@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, View, Dimensions, StyleSheet } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
+import moment from 'moment/min/moment-with-locales.min.js';
+moment.locale('ko');
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -15,24 +17,47 @@ LocaleConfig.locales['kr'] = {
 LocaleConfig.defaultLocale = 'kr';
 
 class WhenScreen extends React.Component {
+  componentDidMount () {
+    let today = moment().format('YYYY-MM-DD');
+    this.setState({current: today, last: today});
+  }
+
+  state = {
+    marked: {[moment().format('YYYY-MM-DD')]: {selected: true, selectedColor: '#654EA3'}}
+  }
+
+  selectDay = (day) => {
+    this.setState({
+      current: day.dateString,
+      marked: {[day.dateString]: {selected: true, selectedColor: '#654EA3'}}
+    })
+  }
+
+
+
+  // day.dateString
+  // day.month day.day
+  // day.timestamp day.year
   render() {
     return (
       <View style={styles.container}>
+        <Text>{this.state.current}</Text>
         <Calendar
+          markedDates={this.state.marked}
           style={{
-            height: 400,
+            height: 360,
             width: DEVICE_WIDTH
           }}
           // Initially visible month. Default = Date()
-          current={'2018-05-18'}
+          current={this.state.current}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
           minDate={'2018-01-01'}
           // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
           maxDate={'2018-12-30'}
           // Handler which gets executed on day press. Default = undefined
-          onDayPress={(day) => {console.log('selected day', day)}}
+          onDayPress={(day) => {this.selectDay(day)}}
           // Handler which gets executed on day long press. Default = undefined
-          onDayLongPress={(day) => {console.log('selected day', day)}}
+          // onDayLongPress={(day) => {console.log('selected day', day)}}
           // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
           monthFormat={'yyyy MM'}
           // Handler which gets executed when visible month changes in calendar. Default = undefined
@@ -44,6 +69,12 @@ class WhenScreen extends React.Component {
           // Handler which gets executed when press arrow icon left. It receive a callback can go next month
           onPressArrowRight={addMonth => addMonth()}
         />
+        <View style={styles.schedule}>
+          <View style={styles.dateInfo}>
+            <Text>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
+            <Text>2018 / 01 / 01</Text>
+          </View>
+        </View>
       </View>
     );
   }
@@ -60,4 +91,17 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
 
   },
+  schedule: {
+    width: DEVICE_WIDTH,
+    height: 600,
+    backgroundColor: '#654EA3',
+    alignItems: 'center'
+  },
+  dateInfo: {
+    width: DEVICE_WIDTH - 40,
+    height: 60,
+    backgroundColor: '#FFFFFF',
+    marginTop: 15,
+    justifyContent: 'center'
+  }
 });
