@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, StyleSheet } from 'react-native';
+import { Text, View, Dimensions, StyleSheet, Button } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import moment from 'moment/min/moment-with-locales.min.js';
@@ -17,6 +17,10 @@ LocaleConfig.locales['kr'] = {
 LocaleConfig.defaultLocale = 'kr';
 
 class WhenScreen extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    return { header: null }
+  }
+
   componentDidMount () {
     let today = moment().format('YYYY-MM-DD');
     this.setState({current: today, last: today});
@@ -33,6 +37,13 @@ class WhenScreen extends React.Component {
     })
   }
 
+  markDay = () => {
+    let arr = [{start: 1526734580251, end: 1526738580251},{start: 1626734580251, end: 1626738580251}]
+
+    this.setState({
+      marked: {}
+    })
+  }
 
 
   // day.dateString
@@ -41,7 +52,6 @@ class WhenScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>{this.state.current}</Text>
         <Calendar
           markedDates={this.state.marked}
           style={{
@@ -73,6 +83,10 @@ class WhenScreen extends React.Component {
           <View style={styles.dateInfo}>
             <Text>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
             <Text>2018 / 01 / 01</Text>
+            <Button
+              title="+"
+              onPress={() => this.props.navigation.navigate('어디')}
+            />
           </View>
         </View>
       </View>

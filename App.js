@@ -4,9 +4,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { WhenScreen, WhereScreen, CheckScreen, AllScreen } from './screens';
 
+const WhenStack = createStackNavigator({
+  '언제': WhenScreen,
+  '어디': WhereScreen
+});
+
+
 const RootTab = createBottomTabNavigator(
   {
-    '언제': { screen: WhenScreen },
+    '언제': { screen: WhenStack },
     '어디서': { screen: WhereScreen },
     '약속확인': { screen: CheckScreen },
     '전체': { screen: AllScreen }
