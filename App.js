@@ -2,11 +2,17 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import { WhenScreen, WhereScreen, CheckScreen, AllScreen } from './screens';
+import { ConnectedWhenScreen, WhereScreen, CheckScreen, AllScreen, ConnectedAuthScreen } from './screens';
+
+// Redux Settings
+import { Provider } from 'react-redux';
+import store from './store';
+
 
 const WhenStack = createStackNavigator({
-  '언제': WhenScreen,
-  '어디': WhereScreen
+  '언제': ConnectedWhenScreen,
+  '어디': WhereScreen,
+  'Auth': ConnectedAuthScreen
 });
 
 
@@ -48,7 +54,12 @@ const RootTab = createBottomTabNavigator(
 );
 
 export default class App extends React.Component {
+
   render() {
-    return <RootTab />;
+    return (
+      <Provider store={store}>
+        <RootTab />
+      </Provider>
+    );
   }
 }

@@ -3,7 +3,13 @@ import { Text, View, Dimensions, StyleSheet, Button } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import moment from 'moment/min/moment-with-locales.min.js';
+
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+
 moment.locale('ko');
+
+
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -20,6 +26,12 @@ class WhenScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
     return { header: null }
   }
+
+  constructor(props) {
+    super(props);
+    props.checkUser(props.navigation);
+  }
+
 
   componentDidMount () {
     let today = moment().format('YYYY-MM-DD');
@@ -82,7 +94,7 @@ class WhenScreen extends React.Component {
         <View style={styles.schedule}>
           <View style={styles.dateInfo}>
             <Text>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
-            <Text>2018 / 01 / 01</Text>
+            <Text>2018 / 01 / 01{this.props.email}</Text>
             <Button
               title="+"
               onPress={() => this.props.navigation.navigate('어디')}
@@ -94,7 +106,7 @@ class WhenScreen extends React.Component {
   }
 }
 
-export { WhenScreen };
+// export { WhenScreen };
 
 const styles = StyleSheet.create({
   container: {
@@ -119,3 +131,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
+
+const mapStateToProps = ({ auth }, ownProps) => {
+  const { email } = auth;
+  return { email };
+    // user_token: state.auth.user_token,
+    // email: state.auth.email,
+    // password: state.auth.password,
+    // loading: state.auth.loading,
+    // error: state.auth.error
+  // };
+};
+
+const ConnectedWhenScreen = connect(mapStateToProps, actions)(WhenScreen);
+
+export { ConnectedWhenScreen };
