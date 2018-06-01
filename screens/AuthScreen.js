@@ -32,8 +32,6 @@ class AuthScreen extends React.Component {
     const { container, font, inputForm, inputFont, loginBtn } = styles;
     return (
       <View style={container}>
-        <Text>{this.state.email}</Text>
-        <Text>{this.state.password}</Text>
         <View style={inputForm}>
           <TextInput placeholderTextColor="#c5c5c5" value={this.state.text}
             maxLength={50}

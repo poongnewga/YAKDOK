@@ -1,16 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import {
   ENROLL_USER,
-
-
-  GET_LUNCHTING_TOKEN_SUCCESS,
-  GET_LUNCHTING_TOKEN_FAIL,
-  EMAIL_CHANGED, PASSWORD_CHANGED,
-  START_LOGIN, FINISH_LOGIN, SET_ERROR_MESSAGE,
-  ENROLL_LOGOUT_FUNCTION,
-  ENROLL_GENDER,SET_PAGE_COUNT,
-  ENROLL_CHATDAY_INFOS, ENROLL_CHAT_DAYS,
-  SIGN_NICKNAME_CHANGED, SIGN_PASSWORD_CHANGED, SIGN_PASSWORD_CHECK_CHANGED, SIGN_GENDER_CHANGED, SIGN_AGE_CHANGED,
 } from './types.js';
 
 
@@ -23,8 +13,9 @@ export const checkUser = ({navigate}) => {
     // 로그인 되어 있다면,
     if (user) {
       // state - email에 유저 email 등록
-      await AsyncStorage.removeItem('user');
+      // await AsyncStorage.removeItem('user');
       dispatch({ type: ENROLL_USER, payload: user });
+      navigate('App');
     } else {
       // 없다면, 로그인 페이지로 이동.
       // await AsyncStorage.setItem('user', 'heejae@likelion.org');
@@ -41,6 +32,7 @@ export const doLogin = ({navigate}, email, password) => {
     if (email == "heejae@likelion.org") {
       if (password == "1234") {
         console.warn("로그인 성공!")
+        await AsyncStorage.setItem('user', 'heejae@likelion.org');
         navigate('언제');
       } else {
         console.warn("패스워드가 일치하지 않습니다.")

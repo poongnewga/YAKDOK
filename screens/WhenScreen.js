@@ -27,12 +27,6 @@ class WhenScreen extends React.Component {
     return { header: null }
   }
 
-  // constructor(props) {
-  //   super(props);
-  //   props.checkUser(props.navigation);
-  // }
-
-
   componentDidMount () {
     let today = moment().format('YYYY-MM-DD');
     this.setState({current: today, last: today});
