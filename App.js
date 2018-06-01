@@ -1,18 +1,18 @@
 import React from 'react';
 import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import { ConnectedWhenScreen, WhereScreen, CheckScreen, AllScreen, ConnectedAuthScreen } from './screens';
+import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
+import { ConnectedWhenScreen, WhereScreen, CheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen } from './screens';
 
 // Redux Settings
 import { Provider } from 'react-redux';
 import store from './store';
 
+const AuthStack = createStackNavigator({ SignIn: ConnectedAuthScreen });
 
 const WhenStack = createStackNavigator({
   '언제': ConnectedWhenScreen,
-  '어디': WhereScreen,
-  'Auth': ConnectedAuthScreen
+  '어디': WhereScreen
 });
 
 
@@ -53,12 +53,24 @@ const RootTab = createBottomTabNavigator(
   }
 );
 
+const SwitchNavigation = createSwitchNavigator(
+  {
+    AuthLoading: ConnectedAuthLoadingScreen,
+    App: RootTab,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+);
+
+
 export default class App extends React.Component {
 
   render() {
     return (
       <Provider store={store}>
-        <RootTab />
+        <SwitchNavigation />
       </Provider>
     );
   }
