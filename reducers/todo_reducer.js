@@ -4,7 +4,14 @@ import {
 
 const INITIAL_STATE = {
   todos: [],
-  yakdoks: []
+  yakdoks: [],
+  yakdok: {
+    title: '가족식사',
+    location: '@내찜닭',
+    date: 1527918072710,
+    enrolled: 2,
+    all: 5
+  }
 };
 
 export default function ( state = INITIAL_STATE, action ) {

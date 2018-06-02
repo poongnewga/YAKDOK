@@ -33,7 +33,7 @@ class AuthScreen extends React.Component {
     return (
       <View style={container}>
         <View style={inputForm}>
-          <TextInput placeholderTextColor="#c5c5c5" value={this.state.text}
+          <TextInput placeholderTextColor="#c5c5c5" value={this.state.email}
             maxLength={50}
             selectionColor={"#c5c5c5"}
             autoCapitalize={'none'} onChangeText={(text)=>{

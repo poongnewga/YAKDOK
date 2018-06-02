@@ -7,7 +7,7 @@ moment.locale('en');
 
 class WhereScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
-    return { title: '새로운 일정'}
+    return { title: '약똑잡기'}
   }
 
   state = {

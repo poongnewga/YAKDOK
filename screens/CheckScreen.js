@@ -1,9 +1,13 @@
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class CheckScreen extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    return { header: null }
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,18 +20,24 @@ class CheckScreen extends React.Component {
     this.props.getYakdoks();
   }
 
+  getInfo = (id) => {
+    // console.warn(id);
+    this.props.navigation.navigate('약똑정보', { id });
+  }
+
   renderYakdoks = (yakdoks) => {
     const listItems = yakdoks.map((yakdok, index) => {
       const {title, location, date} = yakdok;
       return (
-        <View
+        <TouchableOpacity
           key={index}
           style={styles.listItem}
+          onPress={()=>{this.getInfo(index)}}
         >
           <Text>{title}</Text>
           <Text>{location}</Text>
           <Text>{date}</Text>
-        </View>
+        </TouchableOpacity>
       );
     });
 
@@ -92,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 20,
     borderRadius: 7,
-    padding: 10,
+    padding: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,

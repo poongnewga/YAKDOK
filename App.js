@@ -2,7 +2,8 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
-import { ConnectedWhenScreen, WhereScreen, ConnectedCheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen } from './screens';
+import { ConnectedWhenScreen, WhereScreen, ConnectedCheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen, ConnectedYakdokInfo,
+ConnectedMakeYakdok, ConnectedSelectDay } from './screens';
 
 // Redux Settings
 import { Provider } from 'react-redux';
@@ -15,12 +16,26 @@ const WhenStack = createStackNavigator({
   '어디': WhereScreen
 });
 
+const CheckStack = createStackNavigator({
+  '약속확인': ConnectedCheckScreen,
+  '약똑정보': ConnectedYakdokInfo
+});
+
+const YakdokStack = createStackNavigator({
+  // '약속잡기': ConnectedMakeYakdok,
+  // '약똑정보': ConnectedYakdokInfo,
+  // '기간선택': ConnectedSelectDay,
+  '약속잡기': ConnectedSelectDay,
+  '기간선택': ConnectedMakeYakdok,
+  '약똑정보': ConnectedYakdokInfo,
+});
+
 
 const RootTab = createBottomTabNavigator(
   {
     '언제': { screen: WhenStack },
-    '어디서': { screen: WhereScreen },
-    '약속확인': { screen: ConnectedCheckScreen },
+    '약똑잡기': { screen: YakdokStack },
+    '약속확인': { screen: CheckStack },
     '전체': { screen: AllScreen }
   },
   {
@@ -31,7 +46,7 @@ const RootTab = createBottomTabNavigator(
         let iconName;
         if (routeName === '언제') {
           iconName = `ios-create${focused ? '' : '-outline'}`;
-        } else if (routeName === '어디서') {
+        } else if (routeName === '약똑잡기') {
           iconName = `ios-pin${focused ? '' : '-outline'}`;
         } else if (routeName === '약속확인') {
           iconName = `ios-calendar${focused ? '' : '-outline'}`;

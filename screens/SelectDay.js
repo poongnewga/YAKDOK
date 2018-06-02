@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, StyleSheet, Button } from 'react-native';
+import { Text, View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import moment from 'moment/min/moment-with-locales.min.js';
@@ -22,9 +22,14 @@ LocaleConfig.locales['kr'] = {
 
 LocaleConfig.defaultLocale = 'kr';
 
-class WhenScreen extends React.Component {
+class SelectDay extends React.Component {
   static navigationOptions = ({navigation}) => {
     return { header: null }
+  }
+
+  constructor(props) {
+    super(props);
+
   }
 
   componentDidMount () {
@@ -33,14 +38,77 @@ class WhenScreen extends React.Component {
   }
 
   state = {
-    marked: {[moment().format('YYYY-MM-DD')]: {selected: true, selectedColor: '#654EA3'}}
+    selecting: false,
+    finished: false,
+    start: '',
+    end: '',
+    // marked: {[moment().format('YYYY-MM-DD')]: {selected: true, selectedColor: '#654EA3'}}
+    marked: {
+
+    }
+  }
+  // day.dateString
+  // day.month day.day
+  // day.timestamp day.year
+  selectInterval = (day) => {
+    if (this.state.selecting == true) {
+      let s=this.state.start, e='', temp='';
+
+      if (moment(this.state.start).isBefore(day.dateString) || this.state.start == day.dateString) {
+        this.setState({end: day.dateString});
+        e = day.dateString;
+      } else {
+        this.setState({start:day.dateString, end: this.state.start});
+        s = day.dateString;
+        e = this.state.start;
+      }
+      temp = s;
+
+      let marked_temp = {};
+      if (s != e ) {
+        while (moment(temp).isSameOrBefore(e)) {
+          if (moment(temp).isSame(s)) {
+            marked_temp[temp] = {startingDay: true, selected: true, color: '#654EA3', textColor: 'white'}
+            temp = moment(temp).add(1, 'day').format('YYYY-MM-DD');
+            continue;
+          } else if (moment(temp).isSame(e)) {
+            marked_temp[temp] = {endingDay: true, selected: true, color: '#654EA3', textColor: 'white'}
+            temp = moment(temp).add(1, 'day').format('YYYY-MM-DD');
+            continue;
+          }
+
+          marked_temp[temp] = {selected: true, color: '#654EA3', textColor: 'white'}
+          temp = moment(temp).add(1, 'day').format('YYYY-MM-DD');
+        }
+      } else {
+        marked_temp[temp] = {startingDay: true, endingDay: true, selected: true, color: '#654EA3', textColor: 'white'}
+      }
+
+
+
+      this.setState({
+        marked: marked_temp,
+        selecting: false
+      });
+
+    } else {
+      // 처음 선택하거나, 선택 완료 후 다시 클릭할 때.
+      this.setState({
+        marked: {
+        [day.dateString]: {startingDay: true, selected: true, endingDay: true, color: '#654EA3', textColor: 'white'}
+        },
+        start: day.dateString,
+        end: day.dateString,
+        selecting: true
+      });
+    }
   }
 
   selectDay = (day) => {
-    this.setState({
-      current: day.dateString,
-      marked: {[day.dateString]: {selected: true, selectedColor: '#654EA3'}}
-    })
+    // this.setState({
+    //   current: day.dateString,
+    //   marked: {[day.dateString]: {selected: true, selectedColor: '#654EA3'}}
+    // })
   }
 
   markDay = () => {
@@ -64,6 +132,7 @@ class WhenScreen extends React.Component {
             height: 360,
             width: DEVICE_WIDTH
           }}
+          markingType={'period'}
           // Initially visible month. Default = Date()
           current={this.state.current}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
@@ -71,7 +140,7 @@ class WhenScreen extends React.Component {
           // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
           maxDate={'2018-12-30'}
           // Handler which gets executed on day press. Default = undefined
-          onDayPress={(day) => {this.selectDay(day)}}
+          onDayPress={(day) => {this.selectInterval(day)}}
           // Handler which gets executed on day long press. Default = undefined
           // onDayLongPress={(day) => {console.log('selected day', day)}}
           // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -86,21 +155,32 @@ class WhenScreen extends React.Component {
           onPressArrowRight={addMonth => addMonth()}
         />
         <View style={styles.schedule}>
-          <View style={styles.dateInfo}>
+          {/* <View style={styles.dateInfo}>
             <Text>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
             <Text>2018 / 01 / 01{this.props.email}</Text>
             <Button
               title="+"
               onPress={() => this.props.navigation.navigate('어디')}
             />
-          </View>
+          </View> */}
+          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 20}}>약속 희망 날짜를 선택해주세요.</Text>
+          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 20}}>시작 : {this.state.start}</Text>
+          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 20}}>끝 : {this.state.end}</Text>
+          <TouchableOpacity
+            style={{backgroundColor: 'purple', width: 100, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 20}}
+            onPress={()=>{
+              console.warn('heee')
+            }}
+          >
+            <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>다음</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
 
-// export { WhenScreen };
+// export { SelectDay };
 
 const styles = StyleSheet.create({
   container: {
@@ -108,8 +188,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     paddingTop: 50
-    // justifyContent: 'center',
-
   },
   schedule: {
     width: DEVICE_WIDTH,
@@ -129,14 +207,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ auth }, ownProps) => {
   const { email } = auth;
   return { email };
-    // user_token: state.auth.user_token,
-    // email: state.auth.email,
-    // password: state.auth.password,
-    // loading: state.auth.loading,
-    // error: state.auth.error
-  // };
 };
 
-const ConnectedWhenScreen = connect(mapStateToProps, actions)(WhenScreen);
+const ConnectedSelectDay = connect(mapStateToProps, actions)(SelectDay);
 
-export { ConnectedWhenScreen };
+export { ConnectedSelectDay };

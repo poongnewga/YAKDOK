@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "yakdok",
-    "description": "This project is really great.",
+    "description": "약속을 똑똑하게, 약똑",
     "slug": "yakdok",
     "privacy": "public",
     "sdkVersion": "27.0.0",
@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#654EA3"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -4,3 +4,6 @@ export * from './CheckScreen';
 export * from './AllScreen';
 export * from './AuthScreen';
 export * from './AuthLoadingScreen';
+export * from './YakdokInfo';
+export * from './MakeYakdok';
+export * from './SelectDay';
