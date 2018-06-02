@@ -10,13 +10,40 @@ class MakeYakdok extends React.Component {
 
   state = {
     title : "",
-    location: ""
+    location: "",
+    time: 1,
+    members: ['채희재', '안운장', '심건우']
   }
+
+  countDown = () => {
+    if (this.state.time == 1) {
+      return;
+    } else {
+      this.setState({time: this.state.time-1})
+    }
+  }
+
+  countUp = () => {
+    if (this.state.time == 10) {
+      return;
+    } else {
+      this.setState({time: this.state.time+1})
+    }
+  }
+
+  startYakdok = () => {
+    if (this.state.members.length == 0) {
+      console.warn('0명 입니다.')
+    } else {
+      this.props.navigation.navigate('기간선택');
+    }
+  }
+
   render() {
     const { container, font, inputForm, inputFont, loginBtn } = styles;
     return (
       <View style={container}>
-        <View style={{width: '85%', height: '90%'}}>
+        <View style={{width: '85%', height: '100%'}}>
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
             약똑 이름
           </Text>
@@ -45,53 +72,47 @@ class MakeYakdok extends React.Component {
               autoFocus={false} placeholder="장소를 입력해주세요" style={inputFont}
             />
           </View>
+
+
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
-            초대하기
+            소요시간
           </Text>
-          <TouchableOpacity style={{borderRadius:7, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginBottom: 10}}>
+          <View style={{height: 40, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginBottom: 20, }}>
+            <TouchableOpacity onPress={this.countDown} style={{justifyContent: 'center', alignItems: 'center', borderRadius: 15, width:30, height: 30, backgroundColor: 'skyblue'}}>
+              <Text style={{fontWeight: 'bold', color: 'white', fontSize: 22, textAlign: 'center'}}>-</Text>
+            </TouchableOpacity>
+
+            <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>{this.state.time} 시간</Text>
+
+            <TouchableOpacity onPress={this.countUp} style={{justifyContent: 'center', alignItems: 'center', borderRadius: 15, width:30, height: 30, backgroundColor: 'skyblue'}}>
+              <Text style={{fontWeight: 'bold', color: 'white', fontSize: 22, textAlign: 'center'}}>+</Text>
+            </TouchableOpacity>
+
+          </View>
+
+
+
+          <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
+            초대하기 ({'초대된 인원 : ' + this.state.members.length})
+          </Text>
+          <TouchableOpacity style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#8d78bc', marginBottom: 10}}>
             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>약똑 초대하기</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{borderRadius:7, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: 'skyblue', marginBottom: 10}}>
-            <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>Facebook 초대하기</Text>
+          <TouchableOpacity style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F9E81E', marginBottom: 10}}>
+            <Text style={{fontWeight: 'bold', color: '#3F3035', fontSize: 18}}>카카오톡 초대하기</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{borderRadius:7, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow', marginBottom: 10}}>
-            <Text style={{fontWeight: 'bold', color: 'black', fontSize: 18}}>카카오톡 초대하기</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{borderRadius:7, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lime', marginBottom: 10}}>
+          <TouchableOpacity style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00C73C', marginBottom: 10}}>
             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>LINE 초대하기</Text>
           </TouchableOpacity>
+
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+            <TouchableOpacity onPress={this.startYakdok} style={{borderRadius:20, width:100, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginBottom: 10}}>
+              <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>시작하기</Text>
+            </TouchableOpacity>
+          </View>
+
         </View>
 
-        {/* <View style={inputForm}>
-          <TextInput placeholderTextColor="#c5c5c5" value={this.state.text}
-            maxLength={50}
-            selectionColor={"#c5c5c5"}
-            autoCapitalize={'none'} onChangeText={(text)=>{
-              this.setState({email: text});
-            }} returnKeyType="done"
-            autoCorrect={false} underlineColorAndroid={"rgba(0,0,0,0)"}
-            autoFocus={false} keyboardType="email-address" placeholder="Email" style={inputFont}
-          />
-        </View>
-        <View style={inputForm}>
-          <TextInput placeholderTextColor="#c5c5c5" value={this.state.password}
-            maxLength={50}
-            selectionColor={"#c5c5c5"}
-            autoCapitalize={'none'} onChangeText={(text)=>{
-              this.setState({password: text});
-            }} returnKeyType="done"
-            autoCorrect={false} underlineColorAndroid={"rgba(0,0,0,0)"}
-            autoFocus={false} secureTextEntry={true} placeholder="Password" style={inputFont}
-          />
-        </View>
-
-        <TouchableOpacity
-          onPress={()=>{this.props.doLogin(this.props.navigation, this.state.email, this.state.password)}}
-          style={loginBtn}
-          underlayColor="#f4c413"
-        >
-          <Text style={{color: "black", fontSize: 16}}>로그인</Text>
-        </TouchableOpacity> */}
       </View>
     );
   }

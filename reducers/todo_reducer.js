@@ -1,9 +1,10 @@
 import {
-  GET_YD
+  GET_YD, SET_TODO
 } from '../actions/types';
 
 const INITIAL_STATE = {
   todos: [],
+  marked: {},
   yakdoks: [],
   yakdok: {
     title: '가족식사',
@@ -20,6 +21,8 @@ export default function ( state = INITIAL_STATE, action ) {
     case GET_YD:
       // console.warn(action)
       return {...state, yakdoks: action.payload};
+    case SET_TODO:
+      return {...state, marked: action.payload.marked_temp}
 
     default:
       return state;

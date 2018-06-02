@@ -2,6 +2,7 @@ export const ENROLL_USER = '유저 이메일을 state에 등록';
 /////////////
 
 export const GET_YD = '저장된 약똑 불러오기';
+export const SET_TODO = '일정 저장하기';
 
 
 /////

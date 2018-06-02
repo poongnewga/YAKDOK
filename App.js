@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
-import { ConnectedWhenScreen, WhereScreen, ConnectedCheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen, ConnectedYakdokInfo,
+import { ConnectedWhenScreen, ConnectedTodoScreen, ConnectedCheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen, ConnectedYakdokInfo,
 ConnectedMakeYakdok, ConnectedSelectDay } from './screens';
 
 // Redux Settings
@@ -13,7 +13,7 @@ const AuthStack = createStackNavigator({ SignIn: ConnectedAuthScreen });
 
 const WhenStack = createStackNavigator({
   '언제': ConnectedWhenScreen,
-  '어디': WhereScreen
+  '어디': ConnectedTodoScreen
 });
 
 const CheckStack = createStackNavigator({
@@ -22,12 +22,12 @@ const CheckStack = createStackNavigator({
 });
 
 const YakdokStack = createStackNavigator({
-  // '약속잡기': ConnectedMakeYakdok,
-  // '약똑정보': ConnectedYakdokInfo,
-  // '기간선택': ConnectedSelectDay,
-  '약속잡기': ConnectedSelectDay,
-  '기간선택': ConnectedMakeYakdok,
+  '약속잡기': ConnectedMakeYakdok,
   '약똑정보': ConnectedYakdokInfo,
+  '기간선택': ConnectedSelectDay,
+  // '약속잡기': ConnectedSelectDay,
+  // '기간선택': ConnectedMakeYakdok,
+  // '약똑정보': ConnectedYakdokInfo,
 });
 
 

@@ -164,15 +164,15 @@ class SelectDay extends React.Component {
             />
           </View> */}
           <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 20}}>약속 희망 날짜를 선택해주세요.</Text>
-          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 20}}>시작 : {this.state.start}</Text>
-          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 20}}>끝 : {this.state.end}</Text>
+          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 10}}>시작 : {this.state.start}</Text>
+          <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', marginTop: 10}}>끝 : {this.state.end}</Text>
           <TouchableOpacity
-            style={{backgroundColor: 'purple', width: 100, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 20}}
+            style={{backgroundColor: 'purple', width: 100, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 20, marginTop: 10}}
             onPress={()=>{
               console.warn('heee')
             }}
           >
-            <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>다음</Text>
+            <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>완료</Text>
           </TouchableOpacity>
         </View>
       </View>

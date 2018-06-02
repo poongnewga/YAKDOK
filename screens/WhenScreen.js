@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View, Dimensions, StyleSheet, Button } from 'react-native';
+import { Text, View, Dimensions, StyleSheet, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import moment from 'moment/min/moment-with-locales.min.js';
-
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -27,19 +27,34 @@ class WhenScreen extends React.Component {
     return { header: null }
   }
 
+  constructor(props) {
+    super(props);
+    props.getTodos(props.email);
+  }
+
   componentDidMount () {
     let today = moment().format('YYYY-MM-DD');
     this.setState({current: today, last: today});
   }
 
   state = {
-    marked: {[moment().format('YYYY-MM-DD')]: {selected: true, selectedColor: '#654EA3'}}
+    marked: {
+      [moment().format('YYYY-MM-DD')]: {selected: true, selectedColor: '#654EA3'},
+      '2018-06-03': {marked: true, dotColor: '#654EA3'},
+    }
   }
 
   selectDay = (day) => {
     this.setState({
       current: day.dateString,
-      marked: {[day.dateString]: {selected: true, selectedColor: '#654EA3'}}
+
+      marked: {
+        ...this.state.marked,
+        [this.state.last]: {...this.state.marked[this.state.last], selected: false},
+        [day.dateString]: {...this.state.marked[day.dateString], selected: true, selectedColor: '#654EA3'}
+      },
+
+      last: day.dateString
     })
   }
 
@@ -86,21 +101,42 @@ class WhenScreen extends React.Component {
           onPressArrowRight={addMonth => addMonth()}
         />
         <View style={styles.schedule}>
-          <View style={styles.dateInfo}>
-            <Text>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
-            <Text>2018 / 01 / 01{this.props.email}</Text>
-            <Button
-              title="+"
+          <View style={{width: '90%', height: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <View style={{width: '70%'}}>
+              <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold'}}>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
+            </View>
+            <TouchableOpacity
               onPress={() => this.props.navigation.navigate('어디')}
-            />
+              style={{width: 30, height: 30, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 15}}
+            >
+              <Text style={{fontSize: 18, color: '#654EA3', fontWeight: 'bold', textAlign: 'center'}}>+</Text>
+            </TouchableOpacity>
           </View>
+
+          <ScrollView
+            style={{width:'90%'}}
+            contentContainerStyle={{paddingBottom: 400}}
+          >
+            <TouchableOpacity style={{paddingLeft: 20, marginBottom: 20}}>
+              <View style={{flexDirection: 'row', alignItems: 'center', height: 30}}>
+                <Text style={{fontSize: 10, color: 'white', marginLeft: 10}}>●</Text>
+                <Text style={{fontSize: 20, color: 'white', marginLeft: 10}}>캠퍼스 씨이오</Text>
+              </View>
+              <View style={{flexDirection: 'row', alignItems: 'center', height: 30, marginLeft: 30}}>
+                <MaterialIcons name="schedule" size={16} color="white" />
+                <Text style={{fontSize: 16, color: 'white', marginLeft: 10}}>오전 10:00 ~ 오후 1:00</Text>
+              </View>
+            </TouchableOpacity>
+
+
+          </ScrollView>
+
         </View>
       </View>
     );
   }
 }
 
-// export { WhenScreen };
 
 const styles = StyleSheet.create({
   container: {
@@ -108,8 +144,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     paddingTop: 50
-    // justifyContent: 'center',
-
   },
   schedule: {
     width: DEVICE_WIDTH,
@@ -126,15 +160,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ auth }, ownProps) => {
+const mapStateToProps = ({ auth, todo }, ownProps) => {
   const { email } = auth;
-  return { email };
-    // user_token: state.auth.user_token,
-    // email: state.auth.email,
-    // password: state.auth.password,
-    // loading: state.auth.loading,
-    // error: state.auth.error
-  // };
+  const { todos, marked } = todo;
+  return { email, todos };
 };
 
 const ConnectedWhenScreen = connect(mapStateToProps, actions)(WhenScreen);
