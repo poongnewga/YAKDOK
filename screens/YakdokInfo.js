@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
-import DatePicker from 'react-native-datepicker'
 import moment from 'moment/min/moment-with-locales.min.js';
 moment.locale('ko');
 
