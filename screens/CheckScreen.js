@@ -6,6 +6,7 @@ import * as Progress from 'react-native-progress';
 import moment from 'moment/min/moment-with-locales.min.js';
 moment.locale('ko');
 const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 
 class CheckScreen extends React.Component {
@@ -32,40 +33,6 @@ class CheckScreen extends React.Component {
   getInfo = (id) => {
     this.props.navigation.navigate('약똑정보', { id });
   }
-
-  // renderYakdoks = (yakdoks) => {
-  //   const listItems = yakdoks.map((yakdok, index) => {
-  //     const {title, location, date} = yakdok;
-  //     return (
-  //       <TouchableOpacity
-  //         key={index}
-  //         style={styles.listItem}
-  //         onPress={()=>{this.getInfo(index)}}
-  //       >
-  //         <Text>{title}</Text>
-  //         <Text>{location}</Text>
-  //         <Text>{date}</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   });
-  //
-  //   return (
-  //     <ScrollView
-  //       contentContainerStyle={styles.container}
-  //       refreshControl={
-  //         <RefreshControl
-  //           style={{backgroundColor: '#654EA3'}}
-  //           tintColor={'white'}
-  //           refreshing={this.state.refreshing}
-  //           onRefresh={this._onRefresh}
-  //         />
-  //       }
-  //
-  //     >
-  //       {listItems}
-  //     </ScrollView>
-  //   );
-  // }
 
   renderYakdoks = () => {
 
@@ -98,11 +65,11 @@ class CheckScreen extends React.Component {
               <Text style={{fontSize: 12, fontWeight: 'bold', color: '#878787', marginTop: 10}}>@{location}</Text>
             </View>
             <View style={{marginBottom: 10}}>
-              <Text style={{fontSize: 14, color: '#545454'}}>{moment(options[0].begin).format("M월 D일(ddd) A h:mm")}</Text>
+              <Text style={{fontSize: 13, color: '#545454'}}>{moment(options[0].begin).format("M월 D일(ddd) A h:mm")}</Text>
               {(enrolled==total)&&(options[0].yes==total) ? (
-                <Text style={{fontSize: 14, color: color, textAlign: 'right', marginTop: 10}}>약똑 완료</Text>
+                <Text style={{fontSize: 13, color: color, textAlign: 'right', marginTop: 10}}>약똑 완료</Text>
               ) : (
-                <Text style={{fontSize: 14, color: color, textAlign: 'right', marginTop: 10}}>{options[0].yes} / {total}인 가능</Text>
+                <Text style={{fontSize: 13, color: color, textAlign: 'right', marginTop: 10}}>{options[0].yes} / {total}인 가능</Text>
               )}
             </View>
           </View>
@@ -130,6 +97,7 @@ class CheckScreen extends React.Component {
     if (cnt == 0) {
       return (
         <ScrollView
+          contentContainerStyle={styles.container}
           refreshControl={
             <RefreshControl
               style={{backgroundColor: '#654EA3'}}
@@ -138,16 +106,24 @@ class CheckScreen extends React.Component {
               onRefresh={this._onRefresh}
             />
           }
-          contentContainerStyle={styles.emptyContainer}
         >
-          <Text style={{color: 'white', fontSize: 20}}>
+          <Text style={{color: 'white', fontSize: 20, marginTop: DEVICE_HEIGHT * 0.35}}>
             약똑이 존재하지 않습니다.
           </Text>
+          <Text style={{color: 'white', fontSize: 20, marginTop: 10}}>
+            약똑과 함께 약속을 똑똑하게 잡아보세요 :)
+          </Text>
+          <TouchableOpacity
+            style={{borderRadius:20, width:120, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginTop: 20}}
+            onPress={()=>{this.props.navigation.navigate('약속잡기')}}
+          >
+            <Text style={{color: 'white', fontSize: 20}}>
+              약똑잡기
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
       );
     } else {
-
-
 
       return (
         <ScrollView
@@ -160,7 +136,6 @@ class CheckScreen extends React.Component {
               onRefresh={this._onRefresh}
             />
           }
-
         >
           {listItems}
         </ScrollView>

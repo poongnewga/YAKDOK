@@ -17,7 +17,7 @@ const WhenStack = createStackNavigator({
 });
 
 const CheckStack = createStackNavigator({
-  '약속확인': ConnectedCheckScreen,
+  '약똑확인': ConnectedCheckScreen,
   '약똑정보': ConnectedYakdokInfo
 });
 
@@ -33,7 +33,7 @@ const RootTab = createBottomTabNavigator(
   {
     '언제': { screen: WhenStack },
     '약똑잡기': { screen: YakdokStack },
-    '약속확인': { screen: CheckStack },
+    '약똑확인': { screen: CheckStack },
     '전체': { screen: AllScreen }
   },
   {
@@ -46,7 +46,7 @@ const RootTab = createBottomTabNavigator(
           iconName = `ios-create${focused ? '' : '-outline'}`;
         } else if (routeName === '약똑잡기') {
           iconName = `ios-pin${focused ? '' : '-outline'}`;
-        } else if (routeName === '약속확인') {
+        } else if (routeName === '약똑확인') {
           iconName = `ios-calendar${focused ? '' : '-outline'}`;
         } else if (routeName === '전체') {
           iconName = `ios-menu${focused ? '' : '-outline'}`;
