@@ -390,6 +390,65 @@ export const setTodo = (navigate, email, title, location, begin, end, todos, mar
 
 }
 
+export const modifyTodo = (navigate, email, title, location, begin, end, todos, marked, schedules, modifyID) => {
+  return async (dispatch) => {
+
+    // 일정 로드
+    let todos_temp = await AsyncStorage.getItem(email + '_todos');
+    todos_temp = JSON.parse(todos_temp);
+
+    // store 저장용
+    let temp = {...todos};
+    temp[modifyID] = { email, title, location, begin, end }
+    // storage 저장용
+    todos_temp[modifyID] = { email, title, location, begin, end }
+    await AsyncStorage.setItem((email + '_todos'), (JSON.stringify(todos_temp)));
+
+
+    // todos_temp 에 새로운 일정이 추가된 새로운 todos가 저장되어 있음.
+    let marked_temp = {...marked}
+    let s='',e='',t='';
+
+    let schedules_temp = {};
+    for (let id in todos_temp) {
+
+      s = todos_temp[id]["begin"];
+      e = todos_temp[id]["end"];
+      t = s;
+
+      while (moment(t).isSameOrBefore(moment(e))) {
+        marked_temp[moment(t).format("YYYY-MM-DD")] = {
+          ...marked_temp[moment(t).format("YYYY-MM-DD")],
+          marked: true,
+          dotColor: '#654EA3'
+        };
+
+        if (schedules_temp[moment(t).format("YYYY-MM-DD")] == undefined) {
+          schedules_temp[moment(t).format("YYYY-MM-DD")] = [];
+        } else {
+          schedules_temp[moment(t).format("YYYY-MM-DD")] = [...schedules_temp[moment(t).format("YYYY-MM-DD")]];
+        }
+
+        schedules_temp[moment(t).format("YYYY-MM-DD")].push({
+          title: todos_temp[id]["title"],
+          location: todos_temp[id]["location"],
+          begin: s,
+          end: e,
+          id: id
+        });
+
+        t = moment(t).add(1,'day').valueOf()
+      }
+
+    }
+
+    // store 갱신
+    dispatch({ type: SET_TODO, marked: marked_temp, payload: {...temp}, schedules: schedules_temp });
+    navigate('언제');
+  }
+
+}
+
 // 선택한 날짜 하이라이팅
 export const selectDay = (day, current, last, marked, todos) => {
   return async (dispatch) => {

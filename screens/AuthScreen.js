@@ -32,6 +32,9 @@ class AuthScreen extends React.Component {
     const { container, font, inputForm, inputFont, loginBtn } = styles;
     return (
       <View style={container}>
+        <View style={{height: 40, marginBottom: 20}}>
+          <Text style={{fontSize: 25, color: 'white', fontWeight: 'bold', fontStyle: 'italic'}}>약속을 똑똑하게 YAKDOK</Text>
+        </View>
         <View style={inputForm}>
           <TextInput placeholderTextColor="#c5c5c5" value={this.state.email}
             maxLength={50}

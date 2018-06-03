@@ -8,7 +8,11 @@ import * as actions from '../actions';
 
 class TodoScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
-    return { title: '새로운 일정'}
+    if (navigation.getParam('id')) {
+      return { title: '일정 편집'}
+    } else {
+      return { title: '새로운 일정'}
+    }
   }
 
   constructor(props) {
@@ -17,13 +21,22 @@ class TodoScreen extends React.Component {
   }
 
   componentDidMount () {
-    let now = moment().subtract(moment().minute()%10, 'minutes').add(10, 'minutes');
-    let todayDate = moment(now.format('YYYY-MM-DD'))
-    let begin = moment(this.props.current).add(moment.duration(now.diff(todayDate))["_milliseconds"], 'millisecond').format('YYYY-MM-DD hh:mm A');
-    this.setState({
-      begin: begin,
-      end: moment(begin, 'YYYY-MM-DD hh:mm A').add(1, 'hour').format('YYYY-MM-DD hh:mm A'),
-    });
+    let id = this.props.navigation.getParam('id');
+    this.setState({id});
+    if (id) {
+      const { title, location, begin, end } = this.props.todos[id];
+      // console.warn("수정 시작 : ", id)
+      this.setState({ title, location, begin: moment(begin).format('YYYY-MM-DD hh:mm A'), end: moment(end).format('YYYY-MM-DD hh:mm A') });
+    } else {
+      // console.warn("일정 등록 시작")
+      let now = moment().subtract(moment().minute()%10, 'minutes').add(10, 'minutes');
+      let todayDate = moment(now.format('YYYY-MM-DD'))
+      let begin = moment(this.props.current).add(moment.duration(now.diff(todayDate))["_milliseconds"], 'millisecond').format('YYYY-MM-DD hh:mm A');
+      this.setState({
+        begin: begin,
+        end: moment(begin, 'YYYY-MM-DD hh:mm A').add(1, 'hour').format('YYYY-MM-DD hh:mm A'),
+      });
+    }
   }
 
   state = {
@@ -45,17 +58,32 @@ class TodoScreen extends React.Component {
       return;
     }
 
-    this.props.setTodo(
-      navigate,
-      this.props.email,
-      this.state.title,
-      this.state.location,
-      moment(this.state.begin, "YYYY-MM-DD hh:mm A").valueOf(),
-      moment(this.state.end, "YYYY-MM-DD hh:mm A").valueOf(),
-      this.props.todos,
-      this.props.marked,
-      this.props.schedules
-    );
+    if (this.state.id!=undefined) {
+      this.props.modifyTodo(
+        navigate,
+        this.props.email,
+        this.state.title,
+        this.state.location,
+        moment(this.state.begin, "YYYY-MM-DD hh:mm A").valueOf(),
+        moment(this.state.end, "YYYY-MM-DD hh:mm A").valueOf(),
+        this.props.todos,
+        this.props.marked,
+        this.props.schedules,
+        this.state.id
+      );
+    } else {
+      this.props.setTodo(
+        navigate,
+        this.props.email,
+        this.state.title,
+        this.state.location,
+        moment(this.state.begin, "YYYY-MM-DD hh:mm A").valueOf(),
+        moment(this.state.end, "YYYY-MM-DD hh:mm A").valueOf(),
+        this.props.todos,
+        this.props.marked,
+        this.props.schedules
+      );
+    }
   }
 
 
@@ -171,7 +199,7 @@ class TodoScreen extends React.Component {
         <TouchableHighlight onPress={() => {this.enrollTodo(this.props.navigation)}}
           style={{width: 100, height: 40, backgroundColor: '#654EA3', justifyContent: 'center', alignItems: 'center', borderRadius: 20}}
         >
-          <Text style={{color: "#FFFFFF", fontSize: 16, fontWeight: 'bold'}}>등록</Text>
+          <Text style={{color: "#FFFFFF", fontSize: 16, fontWeight: 'bold'}}>{this.state.id!=undefined?"수정":"등록"}</Text>
         </TouchableHighlight>
         <View style={{marginTop: 20}}>
           <Text style={{fontSize: 18, color: '#f46958'}}>{this.state.error}</Text>

@@ -41,7 +41,13 @@ class WhenScreen extends React.Component {
       return (
         this.props.schedules[this.props.current].map((item) => {
           return (
-            <TouchableOpacity onLongPress={()=>{console.warn(item.id)}} key={item.id} style={{paddingLeft: 20, marginBottom: 20}}>
+            <TouchableOpacity
+              onLongPress={()=>{this.props.navigation.navigate(
+                '어디', {id: item.id}
+              )}}
+              key={item.id}
+              style={{paddingLeft: 20, marginBottom: 20}}
+            >
               <View style={{flexDirection: 'row', alignItems: 'center', height: 30}}>
                 <Text style={{fontSize: 8, color: 'white', marginLeft: 10}}>●</Text>
                 <Text style={{fontSize: 20, color: 'white', marginLeft: 10}}>{item.title}</Text>

@@ -39,7 +39,7 @@ export const doLogin = ({navigate}, email, password) => {
   return async (dispatch) => {
     if (email == "heejae@likelion.org") {
       if (password == "1234") {
-        console.warn("로그인 성공!")
+        // console.warn("로그인 성공!")
         await AsyncStorage.setItem('user', email);
         const todos = await AsyncStorage.getItem(email + '_todos');
         if (!todos) {
