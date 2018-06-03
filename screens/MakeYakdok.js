@@ -5,7 +5,7 @@ import * as actions from '../actions';
 
 class MakeYakdok extends React.Component {
   static navigationOptions = ({navigation}) => {
-    return { title: '약똑잡기', header: null }
+    return { title: '', header: null }
   }
 
   state = {
@@ -95,7 +95,7 @@ class MakeYakdok extends React.Component {
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
             초대하기 ({'초대된 인원 : ' + this.state.members.length})
           </Text>
-          <TouchableOpacity style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#8d78bc', marginBottom: 10}}>
+          <TouchableOpacity onPress={()=>{this.props.navigation.navigate('초대하기')}} style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#8d78bc', marginBottom: 10}}>
             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>약똑 초대하기</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F9E81E', marginBottom: 10}}>
@@ -158,12 +158,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ auth }, ownProps) => {
   const { email } = auth;
   return { email };
-    // user_token: state.auth.user_token,
-    // email: state.auth.email,
-    // password: state.auth.password,
-    // loading: state.auth.loading,
-    // error: state.auth.error
-  // };
 };
 
 const ConnectedMakeYakdok = connect(mapStateToProps, actions)(MakeYakdok);

@@ -3,7 +3,7 @@ import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import { ConnectedWhenScreen, ConnectedTodoScreen, ConnectedCheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen, ConnectedYakdokInfo,
-ConnectedMakeYakdok, ConnectedSelectDay } from './screens';
+ConnectedMakeYakdok, ConnectedSelectDay, ConnectedInviteUser } from './screens';
 
 // Redux Settings
 import { Provider } from 'react-redux';
@@ -25,6 +25,7 @@ const YakdokStack = createStackNavigator({
   '약속잡기': ConnectedMakeYakdok,
   '약똑정보': ConnectedYakdokInfo,
   '기간선택': ConnectedSelectDay,
+  '초대하기': ConnectedInviteUser
   // '약속잡기': ConnectedSelectDay,
   // '기간선택': ConnectedMakeYakdok,
   // '약똑정보': ConnectedYakdokInfo,
