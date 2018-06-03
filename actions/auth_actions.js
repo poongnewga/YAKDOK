@@ -1,7 +1,9 @@
 import { AsyncStorage } from 'react-native';
 import {
-  ENROLL_USER,
+  ENROLL_USER, RESET_TODO
 } from './types.js';
+import moment from 'moment/min/moment-with-locales.min.js';
+moment.locale('ko');
 
 
 export const checkUser = ({navigate}) => {
@@ -53,6 +55,33 @@ export const doLogin = ({navigate}, email, password) => {
     } else {
       console.warn("아이디가 존재하지 않습니다.")
     }
+  }
+
+}
+
+export const doLogout = (navigate) => {
+
+  const INITIAL_STATE = {
+    todos: {},
+    marked: {},
+    yakdoks: {},
+    yakdok: {
+      title: '가족식사',
+      location: '@내찜닭',
+      date: 1527918072710,
+      enrolled: 2,
+      all: 5
+    },
+    current: moment().format('YYYY-MM-DD'),
+    last: moment().format('YYYY-MM-DD'),
+    schedules: []
+  }
+
+  return async (dispatch) => {
+    await AsyncStorage.removeItem('user');
+    dispatch({ type: RESET_TODO, payload: INITIAL_STATE });
+    navigate('Auth');
+
   }
 
 }

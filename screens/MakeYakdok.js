@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 class MakeYakdok extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -47,6 +48,11 @@ class MakeYakdok extends React.Component {
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
             약똑 이름
           </Text>
+
+          {/* 화살표로 바꿀것 */}
+          {/* <FontAwesome name="user-circle-o" size={40} color="gray" /> */}
+
+
           <View style={inputForm}>
             <TextInput placeholderTextColor="#c5c5c5" value={this.state.title}
               maxLength={50}

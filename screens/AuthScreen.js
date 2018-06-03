@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, StyleSheet, TouchableHighlight, TextInput } from 'react-native';
+import { Text, View, Dimensions, StyleSheet, TouchableHighlight, TouchableOpacity, TextInput } from 'react-native';
 
 import { connect } from 'react-redux';
 import * as actions from '../actions';
@@ -33,7 +33,7 @@ class AuthScreen extends React.Component {
     return (
       <View style={container}>
         <View style={{height: 40, marginBottom: 20}}>
-          <Text style={{fontSize: 25, color: 'white', fontWeight: 'bold', fontStyle: 'italic'}}>약속을 똑똑하게 YAKDOK</Text>
+          <Text style={{fontSize: 30, color: 'white', fontWeight: 'bold', fontStyle: 'italic'}}>YAKDOK</Text>
         </View>
         <View style={inputForm}>
           <TextInput placeholderTextColor="#c5c5c5" value={this.state.email}
@@ -58,13 +58,12 @@ class AuthScreen extends React.Component {
           />
         </View>
 
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={()=>{this.props.doLogin(this.props.navigation, this.state.email, this.state.password)}}
           style={loginBtn}
-          underlayColor="#f4c413"
         >
           <Text style={{color: "black", fontSize: 16}}>로그인</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import {
-  GET_TODO, SET_TODO, SELECT_DAY
+  GET_TODO, SET_TODO, SELECT_DAY, RESET_TODO
 } from '../actions/types';
 import moment from 'moment/min/moment-with-locales.min.js';
 moment.locale('ko');
@@ -33,6 +33,10 @@ export default function ( state = INITIAL_STATE, action ) {
         current: action.payload.current,
         marked: action.payload.marked,
         last: action.payload.last
+      }
+    case RESET_TODO:
+      return {
+        ...action.payload
       }
 
     default:

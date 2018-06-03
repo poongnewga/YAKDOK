@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
-import { ConnectedWhenScreen, ConnectedTodoScreen, ConnectedCheckScreen, AllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen, ConnectedYakdokInfo,
+import { ConnectedWhenScreen, ConnectedTodoScreen, ConnectedCheckScreen, ConnectedAllScreen, ConnectedAuthScreen, ConnectedAuthLoadingScreen, ConnectedYakdokInfo,
 ConnectedMakeYakdok, ConnectedSelectDay, ConnectedInviteUser } from './screens';
 
 // Redux Settings
@@ -34,7 +34,7 @@ const RootTab = createBottomTabNavigator(
     '언제': { screen: WhenStack },
     '약똑잡기': { screen: YakdokStack },
     '약똑확인': { screen: CheckStack },
-    '전체': { screen: AllScreen }
+    '전체': { screen: ConnectedAllScreen }
   },
   {
     initialRouteName: '언제',
