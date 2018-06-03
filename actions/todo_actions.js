@@ -348,7 +348,7 @@ export const setTodo = (navigate, email, title, location, begin, end, todos, mar
     let marked_temp = {...marked}
     let s='',e='',t='';
 
-    let schedules_temp = {...schedules};
+    let schedules_temp = {};
     for (let id in todos_temp) {
 
       s = todos_temp[id]["begin"];
