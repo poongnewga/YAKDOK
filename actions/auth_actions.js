@@ -37,7 +37,7 @@ export const checkUser = ({navigate}) => {
 export const doLogin = ({navigate}, email, password) => {
 
   return async (dispatch) => {
-    if (email == "heejae@likelion.org") {
+    if (email == "heejae@likelion.org" || email == "woong@likelion.org" || email == "leo@likelion.org") {
       if (password == "1234") {
         // console.warn("로그인 성공!")
         await AsyncStorage.setItem('user', email);

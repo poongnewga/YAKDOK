@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 class InviteUser extends React.Component {
   static navigationOptions = ({navigation}) => {

@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import moment from 'moment/min/moment-with-locales.min.js';
 import {
-  GET_YD, SET_TODO, GET_TODO, SELECT_DAY
+  GET_YD, SET_YD, SET_TODO, GET_TODO, SELECT_DAY
 } from './types.js';
 
 
@@ -20,6 +20,13 @@ export const getYakdoks = () => {
   }
 
 }
+
+export const setYakdok = (id, yakdoks) => {
+  return async (dispatch) => {
+    dispatch({ type: SET_YD, payload: {...yakdoks[id]}});
+  }
+}
+
 
 export const getYakdok = (id) => {
   return async (dispatch) => {

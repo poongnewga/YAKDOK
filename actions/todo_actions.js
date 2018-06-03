@@ -68,13 +68,13 @@ export const setTodo = (navigate, email, title, location, begin, end, todos, mar
 
     // 일정 로드
     let todos_temp = await AsyncStorage.getItem(email + '_todos');
-    console.warn(email + '_todos');
-    console.warn(todos_temp)
+    // console.warn(email + '_todos');
+    // console.warn(todos_temp)
     todos_temp = JSON.parse(todos_temp);
     // 아이디 지정을 위한 카운터
     let cnt = await AsyncStorage.getItem('cnt');
     cnt = parseInt(cnt);
-    console.warn(cnt);
+    // console.warn(cnt);
 
     // store 저장용
     let temp = {...todos};

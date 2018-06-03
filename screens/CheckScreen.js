@@ -34,12 +34,45 @@ class CheckScreen extends React.Component {
     this.props.navigation.navigate('약똑정보', { id });
   }
 
+  renderResult = (enrolled, total, data) => {
+    let options = {...data};
+
+    if (options.length == 0) {
+      return (
+        <View style={{marginBottom: 10}}>
+          <Text style={{fontSize: 13, color: '#545454'}}>가능한 시간대가 없습니다.</Text>
+          <Text style={{fontSize: 13, color: 'red', textAlign: 'right', marginTop: 10}}>약똑 불가능</Text>
+        </View>
+      );
+    } else {
+      if (options[0]) {
+        return (
+          <View style={{marginBottom: 10}}>
+            <Text style={{fontSize: 13, color: '#545454'}}>{moment(options[0].begin).format("M월 D일(ddd) A h:mm")}</Text>
+            {(enrolled==total)&&(options[0].yes==total) ? (
+              <Text style={{fontSize: 13, color: 'green', textAlign: 'right', marginTop: 10}}>약똑 완료</Text>
+            ) : (
+              <Text style={{fontSize: 13, color: 'orange', textAlign: 'right', marginTop: 10}}>{options[0].yes} / {total}인 가능</Text>
+            )}
+          </View>
+        );
+      } else {
+        return (
+          <View style={{marginBottom: 10}}>
+            <Text style={{fontSize: 13, color: '#545454'}}>가능한 시간대가 없습니다.</Text>
+            <Text style={{fontSize: 13, color: 'red', textAlign: 'right', marginTop: 10}}>약똑 불가능</Text>
+          </View>
+        );
+      }
+    }
+  }
+
   renderYakdoks = () => {
 
     let listItems = [];
     let cnt=0;
     for (let y in this.props.yakdoks) {
-      const { title, location, time, begin, end, enrolled, total, host, members, options } = this.props.yakdoks[y];
+      const { title, location, enrolled, total, options } = this.props.yakdoks[y];
 
       let color = 'black';
       if ((enrolled/total) < 0.3) {
@@ -51,6 +84,7 @@ class CheckScreen extends React.Component {
       } else if ((enrolled/total) == 1) {
         color = 'green';
       }
+
 
       cnt++;
       listItems.push(
@@ -64,14 +98,7 @@ class CheckScreen extends React.Component {
               <Text style={{fontSize: 16, fontWeight: 'bold'}}>{title}</Text>
               <Text style={{fontSize: 12, fontWeight: 'bold', color: '#878787', marginTop: 10}}>@{location}</Text>
             </View>
-            <View style={{marginBottom: 10}}>
-              <Text style={{fontSize: 13, color: '#545454'}}>{moment(options[0].begin).format("M월 D일(ddd) A h:mm")}</Text>
-              {(enrolled==total)&&(options[0].yes==total) ? (
-                <Text style={{fontSize: 13, color: color, textAlign: 'right', marginTop: 10}}>약똑 완료</Text>
-              ) : (
-                <Text style={{fontSize: 13, color: color, textAlign: 'right', marginTop: 10}}>{options[0].yes} / {total}인 가능</Text>
-              )}
-            </View>
+            {this.renderResult(enrolled, total, options)}
           </View>
           <View style={{marginBottom: 5, alignItems: 'center'}}>
             <View style={{width: DEVICE_WIDTH * 0.74}}>
@@ -151,31 +178,6 @@ class CheckScreen extends React.Component {
         {this.renderYakdoks()}
       </View>
     );
-
-
-    if (!this.props.yakdoks.length) {
-      return (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              style={{backgroundColor: '#654EA3'}}
-              tintColor={'white'}
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh}
-            />
-          }
-          contentContainerStyle={styles.emptyContainer}
-        >
-          <Text style={{color: 'white', fontSize: 20}}>
-            약똑이 존재하지 않습니다.{this.renderYakdoks()}
-          </Text>
-        </ScrollView>
-      );
-    } else {
-      return this.renderYakdoks(this.props.yakdoks)
-    }
-
-
 
   }
 }

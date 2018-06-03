@@ -1,5 +1,5 @@
 import {
-  ADD_MEMBERS, GET_YD
+  ADD_MEMBERS, GET_YD, SET_YD
 } from '../actions/types';
 import moment from 'moment/min/moment-with-locales.min.js';
 moment.locale('ko');
@@ -20,9 +20,9 @@ const INITIAL_STATE = {
         email: 'heejae@likelion.org'
       },
       members: {
-        'heejae@likelion.org': '채희재',
-        'woong@likelion.org': '안운장',
-        'sim@likelion.org': '심건우'
+        'heejae@likelion.org': {name: '채희재', enrolled: true, yes: true},
+        'woong@likelion.org': {name: '안운장', enrolled: true, yes: true},
+        'sim@likelion.org': {name: '심건우', enrolled: false, yes: false},
       },
       options: [
         {
@@ -31,8 +31,12 @@ const INITIAL_STATE = {
         },
         {
           begin: 1528283756069,
-          yes: 2
-        }
+          yes: 3
+        },
+        {
+          begin: 1528283756068,
+          yes: 3
+        },
       ],
       enrolled: 3,
       total: 3
@@ -50,9 +54,9 @@ const INITIAL_STATE = {
         email: 'heejae@likelion.org'
       },
       members: {
-        'heejae@likelion.org': '채희재',
-        'woong@likelion.org': '안운장',
-        'sim@likelion.org': '심건우'
+        'heejae@likelion.org': {name: '채희재', enrolled: true, yes: false},
+        'woong@likelion.org': {name: '안운장', enrolled: true, yes: false},
+        'sim@likelion.org': {name: '심건우', enrolled: false, yes: true},
       },
       options: [
         {
@@ -67,12 +71,25 @@ const INITIAL_STATE = {
     }
   },
   // 상세 정보를 위한 약똑 정보
-  yakdok: {
-    title: '가족식사',
-    location: '@내찜닭',
-    date: 1527918072710,
-    enrolled: 2,
-    all: 5
+  yakdokItem: {
+    title: "",
+    location: "",
+    time: 1,
+    begin: moment().valueOf(),
+    end: moment().valueOf(),
+    enrolled: 0,
+    total: 1,
+    host: {
+      name: '',
+      email: 'yakdok'
+    },
+    members: {
+      'yakdok': {name: '', enrolled: true, yes: true},
+    },
+    options: [{
+      begin: 0,
+      yes: 0
+    }],
   }
 };
 
@@ -80,6 +97,8 @@ export default function ( state = INITIAL_STATE, action ) {
   switch (action.type) {
     case GET_YD:
       return {...state}
+    case SET_YD:
+      return {...state, yakdokItem: action.payload}
 
     default:
       return state;
