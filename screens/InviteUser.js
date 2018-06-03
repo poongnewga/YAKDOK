@@ -13,30 +13,12 @@ class InviteUser extends React.Component {
   }
 
   state = {
-    email: "",
-    title : "",
-    location: "",
-    time: 1,
-    members: ['채희재', '안운장', '심건우'],
-
     result: {
-      name: '안운장',
-      email: 'woong@likelion.org'
+      // name: '안운장',
+      // email: 'woong@likelion.org'
     },
     error: true,
     members: {
-      'woong2@likelion.org': '안운장',
-      'woong21@likelion.org': '안운장',
-      'woong22@likelion.org': '안운장',
-      'woong23@likelion.org': '안운장',
-      'woong24@likelion.org': '안운장',
-      'woong25@likelion.org': '안운장',
-      'woong12@likelion.org': '안운장',
-      'woong232@likelion.org': '안운장',
-      'woong42@likelion.org': '안운장',
-      'woong32111@likelion.org': '안운장',
-
-
     }
 
   }
@@ -128,6 +110,11 @@ class InviteUser extends React.Component {
     );
   }
 
+  inviteUser = () => {
+    this.props.inviteMember(this.props.navigation.navigate, this.state.members);
+    this.props.navigation.navigate('약속잡기')
+  }
+
   render() {
     const { container, font, inputForm, inputFont, loginBtn } = styles;
     return (
@@ -158,7 +145,7 @@ class InviteUser extends React.Component {
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
             검색 결과
           </Text>
-          {this.state.error!=true?(
+          {this.state.error==true?(
             <View style={{justifyContent: 'center', alignItems: 'center', width: '100%', height: 40, backgroundColor: '#ebebeb', borderRadius: 7, borderWidth: 1, borderColor: '#d2d2d2', backgroundColor: 'white', marginBottom: 10 }} >
               <Text style={{fontWeight: 'bold', color: 'orange', fontSize: 18}}>검색 결과가 없습니다.</Text>
             </View>
@@ -184,7 +171,7 @@ class InviteUser extends React.Component {
             {this.renderMembers()}
           </ScrollView>
           <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginVertical: 10}}>
-            <TouchableOpacity onPress={this.searchUser} style={{borderRadius:20, width:80, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginBottom: 10}}>
+            <TouchableOpacity onPress={this.inviteUser} style={{borderRadius:20, width:80, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginBottom: 10}}>
               <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>초대</Text>
             </TouchableOpacity>
           </View>

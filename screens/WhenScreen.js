@@ -92,8 +92,6 @@ class WhenScreen extends React.Component {
           }}
           // Initially visible month. Default = Date()
           current={this.props.current}
-          minDate={'2018-01-01'}
-          maxDate={'2018-12-30'}
           onDayPress={(day) => {this.props.selectDay(day, this.props.current, this.props.last, this.props.marked, this.props.todos)}}
           monthFormat={'yyyy년 M월'}
           onMonthChange={(month) => {console.log('month changed', month)}}

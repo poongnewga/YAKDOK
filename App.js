@@ -26,9 +26,6 @@ const YakdokStack = createStackNavigator({
   '약똑정보': ConnectedYakdokInfo,
   '기간선택': ConnectedSelectDay,
   '초대하기': ConnectedInviteUser
-  // '약속잡기': ConnectedSelectDay,
-  // '기간선택': ConnectedMakeYakdok,
-  // '약똑정보': ConnectedYakdokInfo,
 });
 
 
