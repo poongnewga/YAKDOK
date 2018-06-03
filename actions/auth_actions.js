@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import {
   ENROLL_USER, RESET_TODO
@@ -39,21 +40,28 @@ export const checkUser = ({navigate}) => {
 export const doLogin = ({navigate}, email, password) => {
 
   return async (dispatch) => {
-    if (email == "heejae@likelion.org" || email == "woong@likelion.org" || email == "leo@likelion.org") {
-      if (password == "1234") {
-        // console.warn("로그인 성공!")
-        await AsyncStorage.setItem('user', email);
-        const todos = await AsyncStorage.getItem(email + '_todos');
-        if (!todos) {
-          await AsyncStorage.setItem((email + '_todos'), JSON.stringify({}));
-        }
-        dispatch({ type: ENROLL_USER, payload: email });
-        navigate('언제');
-      } else {
-        console.warn("패스워드가 일치하지 않습니다.")
-      }
+
+
+    if (email=="") {
+      console.warn("아이디를 입력해주세요.")
     } else {
-      console.warn("아이디가 존재하지 않습니다.")
+
+      const temp = await axios.post('http://52.78.125.87/users/sign_in', { email, password });
+
+      if (temp.data.status == "fail") {
+        console.warn("아이디/패스워드를 다시 확인해주세요.")
+      } else {
+        console.warn(temp.data[0].email)
+      }
+
+      await AsyncStorage.setItem('user', email);
+      const todos = await AsyncStorage.getItem(email + '_todos');
+      if (!todos) {
+        await AsyncStorage.setItem((email + '_todos'), JSON.stringify({}));
+      }
+      dispatch({ type: ENROLL_USER, payload: email });
+      navigate('언제');
+
     }
   }
 
