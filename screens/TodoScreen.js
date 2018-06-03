@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import moment from 'moment/min/moment-with-locales.min.js';
-moment.locale('en');
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -14,39 +13,35 @@ class TodoScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    moment.locale('en');
+  }
+
+  componentDidMount () {
+    let now = moment().subtract(moment().minute()%10, 'minutes').add(10, 'minutes');
+    let todayDate = moment(now.format('YYYY-MM-DD'))
+    let begin = moment(this.props.current).add(moment.duration(now.diff(todayDate))["_milliseconds"], 'millisecond').format('YYYY-MM-DD hh:mm A');
+    this.setState({
+      begin: begin,
+      end: moment(begin, 'YYYY-MM-DD hh:mm A').add(1, 'hour').format('YYYY-MM-DD hh:mm A'),
+    });
   }
 
   state = {
     title: "",
     location: "",
-    begin: moment().subtract(moment().minute()%10,'minutes').format('YYYY-MM-DD hh:mm A'),
-    end: moment().add(1, 'hour').subtract(moment().minute()%10,'minutes').format('YYYY-MM-DD hh:mm A'),
     error: ""
   }
 
-  // enrollSchedule = async () => {
-  //   let t = await axios({
-  //     method: 'post',
-  //     url: 'http://localhost:3000/schedules',
-  //     data: {
-  //       phone: '010-3375-4005',
-  //       title: this.state.title,
-  //       begin: moment(this.state.begin, "YYYY-MM-DD hh:mm A").valueOf(),
-  //       end: moment(this.state.end, "YYYY-MM-DD hh:mm A").valueOf()
-  //     }
-  //   });
-  //
-  //   if (t.data["status"] == "ok") {
-  //     this.props.navigation.navigate('언제');
-  //   } else {
-  //
-  //   }
-  // }
-
   enrollTodo = ({navigate}) => {
     this.setState({error: ""})
+
     if (this.state.begin == this.state.end) {
       this.setState({error: "시작시간과 종료시간은 달라야 합니다."})
+      return;
+    }
+
+    if (this.state.title == "") {
+      this.setState({error: "일정명은 반드시 있어야 합니다."})
       return;
     }
 
@@ -54,10 +49,12 @@ class TodoScreen extends React.Component {
       navigate,
       this.props.email,
       this.state.title,
+      this.state.location,
       moment(this.state.begin, "YYYY-MM-DD hh:mm A").valueOf(),
       moment(this.state.end, "YYYY-MM-DD hh:mm A").valueOf(),
       this.props.todos,
-      this.props.marked
+      this.props.marked,
+      this.props.schedules
     );
   }
 
@@ -91,11 +88,10 @@ class TodoScreen extends React.Component {
                 this.setState({title: text});
               }} returnKeyType="done"
               autoCorrect={false} underlineColorAndroid={"rgba(0,0,0,0)"}
-              autoFocus={false} placeholder="일정을 입력해주세요." style={styles.tinput}
+              autoFocus={false} placeholder="일정명을 입력해주세요." style={styles.tinput}
             />
           </View>
-        </View>
-        <View style={{width: '80%'}}>
+
           <Text style={{fontSize: 18, fontWeight: 'bold', color: '#654EA3', marginBottom: 10}}>장소</Text>
           <View style={styles.inputform}>
             <TextInput placeholderTextColor="#c5c5c5" value={this.state.location}
@@ -108,72 +104,69 @@ class TodoScreen extends React.Component {
               autoFocus={false} placeholder="장소를 입력해주세요." style={styles.tinput}
             />
           </View>
+
+          <DatePicker
+            style={{width: "100%", marginBottom: 30}}
+            date={this.state.begin}
+            mode="datetime"
+            format="YYYY-MM-DD hh:mm A"
+            confirmBtnText="확인"
+            cancelBtnText="취소"
+            showIcon={true}
+            iconComponent={(
+              <View style={{height: '100%', width: 50,
+                 position: 'absolute', left: 0,
+                 justifyContent: 'center'}}>
+                <Text style={{fontSize: 18, color: '#654EA3', fontWeight: 'bold'}}>시작</Text>
+              </View>
+            )}
+            customStyles={{
+              dateIcon: {
+                position: 'absolute',
+                left: 0,
+                top: 4,
+                marginLeft: 0
+              },
+              dateInput: {
+                marginLeft: 50,
+                borderColor: "#d2d2d2"
+              }
+            }}
+            minuteInterval={10}
+            onDateChange={(time) => {this.changeBeginTime(time);}}
+          />
+          <DatePicker
+            style={{width: "100%", marginBottom: 30}}
+            date={this.state.end}
+            mode="datetime"
+            format="YYYY-MM-DD hh:mm A"
+            confirmBtnText="확인"
+            cancelBtnText="취소"
+            showIcon={true}
+            iconComponent={(
+              <View style={{height: '100%', width: 50,
+                 position: 'absolute', left: 0,
+                 justifyContent: 'center'}}>
+                <Text style={{fontSize: 18, color: '#654EA3', fontWeight: 'bold'}}>종료</Text>
+              </View>
+            )}
+            customStyles={{
+              dateIcon: {
+                position: 'absolute',
+                left: 0,
+                top: 4,
+                marginLeft: 0
+              },
+              dateInput: {
+                marginLeft: 50,
+                borderColor: "#d2d2d2"
+              }
+            }}
+            minuteInterval={10}
+            onDateChange={(time) => {this.changeEndTime(time);}}
+          />
         </View>
 
-
-
-
-
-        <DatePicker
-          style={{width: "80%", marginBottom: 30}}
-          date={this.state.begin}
-          mode="datetime"
-          format="YYYY-MM-DD hh:mm A"
-          confirmBtnText="확인"
-          cancelBtnText="취소"
-          showIcon={true}
-          iconComponent={(
-            <View style={{height: '100%', width: 50,
-               position: 'absolute', left: 0,
-               justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 16, color: '#654EA3'}}>시작</Text>
-            </View>
-          )}
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              left: 0,
-              top: 4,
-              marginLeft: 0
-            },
-            dateInput: {
-              marginLeft: 50,
-              borderColor: "#d2d2d2"
-            }
-          }}
-          minuteInterval={10}
-          onDateChange={(time) => {this.changeBeginTime(time);}}
-        />
-        <DatePicker
-          style={{width: "80%", marginBottom: 30}}
-          date={this.state.end}
-          mode="datetime"
-          format="YYYY-MM-DD hh:mm A"
-          confirmBtnText="확인"
-          cancelBtnText="취소"
-          showIcon={true}
-          iconComponent={(
-            <View style={{height: '100%', width: 50,
-               position: 'absolute', left: 0,
-               justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 16, color: '#654EA3'}}>종료</Text>
-            </View>
-          )}
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              left: 0,
-              top: 4,
-              marginLeft: 0
-            },
-            dateInput: {
-              marginLeft: 50,
-              borderColor: "#d2d2d2"
-            }
-          }}
-          minuteInterval={10}
-          onDateChange={(time) => {this.changeEndTime(time);}}
-        />
 
         <TouchableHighlight onPress={() => {this.enrollTodo(this.props.navigation)}}
           style={{width: 100, height: 40, backgroundColor: '#654EA3', justifyContent: 'center', alignItems: 'center', borderRadius: 20}}
@@ -197,7 +190,7 @@ const styles = StyleSheet.create({
   },
   inputform: {
     width: '100%',
-    height: 30,
+    height: 40,
     borderWidth: 1,
     borderColor: '#d2d2d2',
     backgroundColor: 'rgba(0,0,0,0)',
@@ -213,8 +206,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ auth, todo }, ownProps) => {
   const { email } = auth;
-  const { todos, marked } = todo;
-  return { email, todos, marked };
+  const { todos, marked, current, schedules } = todo;
+  return { email, todos, marked, current, schedules };
 };
 
 const ConnectedTodoScreen = connect(mapStateToProps, actions)(TodoScreen);

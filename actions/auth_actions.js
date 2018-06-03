@@ -7,6 +7,14 @@ import {
 export const checkUser = ({navigate}) => {
 
   return async (dispatch) => {
+    // 디버깅용
+    // await AsyncStorage.clear()
+
+    const cnt = await AsyncStorage.getItem('cnt');
+    if (!cnt) {
+      await AsyncStorage.setItem('cnt', '1');
+    }
+
     // 이미 로그인 되어 있는지 확인
     const user = await AsyncStorage.getItem('user');
 
@@ -32,7 +40,12 @@ export const doLogin = ({navigate}, email, password) => {
     if (email == "heejae@likelion.org") {
       if (password == "1234") {
         console.warn("로그인 성공!")
-        await AsyncStorage.setItem('user', 'heejae@likelion.org');
+        await AsyncStorage.setItem('user', email);
+        const todos = await AsyncStorage.getItem(email + '_todos');
+        if (!todos) {
+          await AsyncStorage.setItem((email + '_todos'), JSON.stringify({}));
+        }
+        dispatch({ type: ENROLL_USER, payload: email });
         navigate('언제');
       } else {
         console.warn("패스워드가 일치하지 않습니다.")

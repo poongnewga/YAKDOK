@@ -29,104 +29,91 @@ class WhenScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    props.getTodos(props.email);
+    props.getTodos(props.email, props.marked);
   }
-
-  componentDidMount () {
-    let today = moment().format('YYYY-MM-DD');
-    this.setState({current: today, last: today});
-  }
-
-  state = {
-    marked: {
-      [moment().format('YYYY-MM-DD')]: {selected: true, selectedColor: '#654EA3'},
-      '2018-06-03': {marked: true, dotColor: '#654EA3'},
-    }
-  }
-
-  selectDay = (day) => {
-    this.setState({
-      current: day.dateString,
-
-      marked: {
-        ...this.state.marked,
-        [this.state.last]: {...this.state.marked[this.state.last], selected: false},
-        [day.dateString]: {...this.state.marked[day.dateString], selected: true, selectedColor: '#654EA3'}
-      },
-
-      last: day.dateString
-    })
-  }
-
-  markDay = () => {
-    let arr = [{start: 1526734580251, end: 1526738580251},{start: 1626734580251, end: 1626738580251}]
-
-    this.setState({
-      marked: {}
-    })
-  }
-
 
   // day.dateString
   // day.month day.day
   // day.timestamp day.year
+
+  renderSchedules = () => {
+    if (this.props.schedules[this.props.current]) {
+      return (
+        this.props.schedules[this.props.current].map((item) => {
+          return (
+            <TouchableOpacity onLongPress={()=>{console.warn(item.id)}} key={item.id} style={{paddingLeft: 20, marginBottom: 20}}>
+              <View style={{flexDirection: 'row', alignItems: 'center', height: 30}}>
+                <Text style={{fontSize: 8, color: 'white', marginLeft: 10}}>●</Text>
+                <Text style={{fontSize: 20, color: 'white', marginLeft: 10}}>{item.title}</Text>
+              </View>
+              {item.location!="" ? (
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 30, marginLeft: 30}}>
+                  <MaterialIcons name="location-on" size={16} color="white" />
+                  <Text style={{fontSize: 14, color: 'white', marginLeft: 10}}>
+                    {item.location}
+                  </Text>
+                </View>
+              ):""}
+              <View style={{flexDirection: 'row', alignItems: 'center', height: 30, marginLeft: 30}}>
+                <MaterialIcons name="schedule" size={16} color="white" />
+                <Text style={{fontSize: 14, color: 'white', marginLeft: 10}}>
+                  {moment(item.begin).format("M/D A hh:mm")} ~ {moment(item.end).format("M/D A hh:mm")}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })
+
+      );
+    } else {
+      return (
+        <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'center', height: 30}}>
+          <Text style={{fontSize: 8, color: 'white', marginLeft: 10}}>●</Text>
+          <Text style={{fontSize: 20, color: 'white', marginLeft: 10}}>아직 일정이 없습니다.</Text>
+        </View>
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Calendar
-          markedDates={this.state.marked}
+          markedDates={this.props.marked}
           style={{
             height: 360,
             width: DEVICE_WIDTH
           }}
           // Initially visible month. Default = Date()
-          current={this.state.current}
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+          current={this.props.current}
           minDate={'2018-01-01'}
-          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
           maxDate={'2018-12-30'}
-          // Handler which gets executed on day press. Default = undefined
-          onDayPress={(day) => {this.selectDay(day)}}
-          // Handler which gets executed on day long press. Default = undefined
-          // onDayLongPress={(day) => {console.log('selected day', day)}}
-          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+          onDayPress={(day) => {this.props.selectDay(day, this.props.current, this.props.last, this.props.marked, this.props.todos)}}
           monthFormat={'yyyy년 M월'}
-          // Handler which gets executed when visible month changes in calendar. Default = undefined
           onMonthChange={(month) => {console.log('month changed', month)}}
           // Hide month navigation arrows. Default = false
           hideArrows={false}
-          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
           onPressArrowLeft={substractMonth => substractMonth()}
-          // Handler which gets executed when press arrow icon left. It receive a callback can go next month
           onPressArrowRight={addMonth => addMonth()}
         />
+
         <View style={styles.schedule}>
           <View style={{width: '90%', height: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <View style={{width: '70%'}}>
-              <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold'}}>{moment(this.state.current).format('YYYY / MM / DD')}</Text>
+              <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold'}}>{moment(this.props.current).format('YYYY / MM / DD')}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('어디')}
+              onPress={() => {this.props.navigation.navigate('어디');}}
               style={{width: 30, height: 30, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 15}}
             >
               <Text style={{fontSize: 18, color: '#654EA3', fontWeight: 'bold', textAlign: 'center'}}>+</Text>
             </TouchableOpacity>
           </View>
-
           <ScrollView
             style={{width:'90%'}}
             contentContainerStyle={{paddingBottom: 400}}
           >
-            <TouchableOpacity style={{paddingLeft: 20, marginBottom: 20}}>
-              <View style={{flexDirection: 'row', alignItems: 'center', height: 30}}>
-                <Text style={{fontSize: 10, color: 'white', marginLeft: 10}}>●</Text>
-                <Text style={{fontSize: 20, color: 'white', marginLeft: 10}}>캠퍼스 씨이오</Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center', height: 30, marginLeft: 30}}>
-                <MaterialIcons name="schedule" size={16} color="white" />
-                <Text style={{fontSize: 16, color: 'white', marginLeft: 10}}>오전 10:00 ~ 오후 1:00</Text>
-              </View>
-            </TouchableOpacity>
+            {this.renderSchedules()}
 
 
           </ScrollView>
@@ -162,8 +149,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ auth, todo }, ownProps) => {
   const { email } = auth;
-  const { todos, marked } = todo;
-  return { email, todos };
+  const { todos, marked, yakdoks, current, last, schedules } = todo;
+  return { email, todos, marked, yakdoks, current, last, schedules };
 };
 
 const ConnectedWhenScreen = connect(mapStateToProps, actions)(WhenScreen);
