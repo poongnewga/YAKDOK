@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import moment from 'moment/min/moment-with-locales.min.js';
 import {
-  GET_YD, SET_YD, SET_TODO, GET_TODO, SELECT_DAY
+  GET_YD, SET_YD, SET_TODO, GET_TODO, SELECT_DAY, ADD_MEMBERS
 } from './types.js';
 
 
@@ -158,16 +158,10 @@ export const getYakdok = (id) => {
 
 
 
-export const inviteMember = (id) => {
-  console.warn('hi')
+export const inviteMember = (navigate, newData, oldData) => {
+  let members = { ...newData }
   return async (dispatch) => {
-    // dispatch({ type: GET_YD, payload: [
-    //   {
-    //     title: '가족식사',
-    //     location: '@내찜닭',
-    //     date: '날짜'
-    //   }
-    // ]});
+    dispatch({ type: ADD_MEMBERS, payload: members });
   }
 
 }

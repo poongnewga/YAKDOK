@@ -41,6 +41,12 @@ class MakeYakdok extends React.Component {
   }
 
   render() {
+
+    let cnt = 0;
+    for (let i in this.props.members) {
+      cnt++;
+    }
+
     const { container, font, inputForm, inputFont, loginBtn } = styles;
     return (
       <View style={container}>
@@ -99,7 +105,7 @@ class MakeYakdok extends React.Component {
 
 
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18, marginBottom: 10}}>
-            초대하기 ({'초대된 인원 : ' + this.state.members.length})
+            초대하기 ({'초대된 인원 : ' + cnt + '명'})
           </Text>
           <TouchableOpacity onPress={()=>{this.props.navigation.navigate('초대하기')}} style={{borderRadius:7, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: '#8d78bc', marginBottom: 10}}>
             <Text style={{fontWeight: 'bold', color: 'white', fontSize: 18}}>약똑 초대하기</Text>
@@ -161,9 +167,10 @@ const styles = StyleSheet.create({
 });
 
 
-const mapStateToProps = ({ auth }, ownProps) => {
+const mapStateToProps = ({ auth, yakdok }, ownProps) => {
   const { email } = auth;
-  return { email };
+  const { members } = yakdok;
+  return { email, members };
 };
 
 const ConnectedMakeYakdok = connect(mapStateToProps, actions)(MakeYakdok);

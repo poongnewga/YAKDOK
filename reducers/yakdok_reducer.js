@@ -99,6 +99,8 @@ export default function ( state = INITIAL_STATE, action ) {
       return {...state}
     case SET_YD:
       return {...state, yakdokItem: action.payload}
+    case ADD_MEMBERS:
+      return {...state, members: action.payload}
 
     default:
       return state;

@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { FontAwesome } from '@expo/vector-icons';
+import axios from 'axios';
 
 class InviteUser extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -13,12 +14,14 @@ class InviteUser extends React.Component {
   }
 
   state = {
+    email: "",
     result: {
       // name: '안운장',
       // email: 'woong@likelion.org'
     },
     error: true,
     members: {
+      ...this.props.members
     }
 
   }
@@ -31,8 +34,26 @@ class InviteUser extends React.Component {
     }
   }
 
-  searchUser = () => {
-    console.warn(this.state.email)
+  searchUser = async () => {
+    const temp = await axios.post('http://52.78.125.87/users/sign_in', { email: this.state.email });
+    if (temp.data.status == "fail") {
+      // console.warn("유저가 존재하지 않습니다.")
+      this.setState({
+        error: true,
+        result: {}
+      })
+    } else {
+      // console.warn('성공')
+      this.setState({
+        error: false,
+        result: {
+          name: temp.data[0].name,
+          email: temp.data[0].email,
+        }
+      })
+    }
+    // console.warn(temp.data);
+    // console.warn(this.state.email)
   }
 
   addUser = () => {
@@ -111,7 +132,7 @@ class InviteUser extends React.Component {
   }
 
   inviteUser = () => {
-    this.props.inviteMember(this.props.navigation.navigate, this.state.members);
+    this.props.inviteMember(this.props.navigation.navigate, this.state.members, this.props.members);
     this.props.navigation.navigate('약속잡기')
   }
 
@@ -220,9 +241,10 @@ const styles = StyleSheet.create({
 });
 
 
-const mapStateToProps = ({ auth }, ownProps) => {
+const mapStateToProps = ({ auth, yakdok }, ownProps) => {
   const { email } = auth;
-  return { email };
+  const { members } = yakdok
+  return { email, members };
     // user_token: state.auth.user_token,
     // email: state.auth.email,
     // password: state.auth.password,

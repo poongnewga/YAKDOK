@@ -51,7 +51,7 @@ export const doLogin = ({navigate}, email, password) => {
       if (temp.data.status == "fail") {
         console.warn("아이디/패스워드를 다시 확인해주세요.")
       } else {
-        console.warn(temp.data[0].email)
+        // console.warn(temp.data[0].email)
       }
 
       await AsyncStorage.setItem('user', email);
